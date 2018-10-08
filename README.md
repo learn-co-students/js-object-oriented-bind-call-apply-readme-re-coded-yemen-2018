@@ -10,35 +10,33 @@ In our exploration of `this`, we saw how it can change depending on how it is ca
 
 ```js
 function greet() {
-  console.log(`my name is ${this.name}, hi!`);
+    console.log(`my name is ${this.name}, hi!`);
 }
-greet()
-// "my name is , hi!"
-
+ 
+greet(); // my name is , hi!
+ 
 let person = {
-  name: 'bob',
-  greet: greet
-}
-
-person.greet()
-// my name is bob, hi!
+    name: 'Bob',
+    greet: greet
+};
+ 
+person.greet(); // my name is Bob, hi!
 ```
 
 As we see above, when the `greet` function is invoked as a function, `this` is the global scope.  However, when greet is invoked as a method of an object `this` changes to equal the object receiving the method call.  One thing we have yet to explore, is how Javascript allows us to set `this` to equal whatever we want.  Let's look at that.
 
 ```js
 function greet() {
-  console.log(`my name is ${this.name}, hi!`);
+    console.log(`my name is ${this.name}, hi!`);
 }
-
-let sally = {name: 'sally'}
-
-greet.apply(sally)
-// my name is sally, hi!
-
-greet.call(sally)
-// my name is sally, hi!
-
+ 
+let sally = { name: 'Sally' };
+ 
+greet.call(sally);
+// my name is Sally, hi!
+ 
+greet.apply(sally);
+// my name is Sally, hi!
 ```
 
 As you see above, we can use `call()` or `apply()` to invoke a function with an explicit value for `this`.  So, instead of invoking the `greet()` function directly, we're invoking the `call()` method or the `apply()` method of the `greet` function.  And yes, our `greet` function can have a method, because in JavaScript functions are first class objects.   
@@ -53,7 +51,7 @@ Let's modify our `greet` function to be a little friendlier:
 ```js
 
 function greet(customerOne, customerTwo) {
-  console.log(`Hi ${customerOne} and ${customerTwo}, my name is ${this.name}!`);
+    console.log(`Hi ${customerOne} and ${customerTwo}, my name is ${this.name}!`);
 }
 ```
 
@@ -62,28 +60,28 @@ Now, when we invoke `greet`, not only do we need to explicitly set `this`, but w
 Using `call`, we pass the object for `this` as the first argument, followed by any function arguments in order.
 
 ```js
-let sally = {name: 'sally'}
-
+let sally = { name: 'Sally' };
+ 
 function greet(customerOne, customerTwo) {
-  console.log(`Hi ${customerOne} and ${customerTwo}, my name is ${this.name}!`);
+    console.log(`Hi ${customerOne} and ${customerTwo}, my name is ${this.name}!`);
 }
-
-greet.call(sally, "Terry", "George");
-// Hi Terry and George, my name is sally!
+ 
+greet.call(sally, 'Terry', 'George');
+// Hi Terry and George, my name is Sally!
 ```
 
 Great! Now we see the name and the message! What happens if we don't pass any arguments?
 
 ```js
 greet.call(sally);
-// Hi undefined and undefined, my name is sally!
+// Hi undefined and undefined, my name is Sally!
 ```
 
 Okay, what about `apply`? So, this works very similar to `call`, except that `apply` only takes two arguments: the value of `this`, and then an *array* of arguments to pass to the target function. So to use `apply` with our new serve object, we'll need to pass that customer value inside an array.
 
 ```js
-greet.apply(sally, ["Terry", "George"]);
-// Hi Terry and George, my name is sally!
+greet.apply(sally, ['Terry', 'George']);
+// Hi Terry and George, my name is Sally!
 ```
 
 Very similar, but we need to wrap the arguments to the `greet` function in brackets to make it an array.  You can remember the difference because `apply` takes an **array** (both begin with the letter a).  You can use either `call` or `apply`.  The only difference is stylistic.
@@ -99,18 +97,18 @@ Using `bind` is similar to `call` in that the first argument will be the value f
 Try this out with our earlier example:
 
 ```js
-let sally = {name: 'sally'}
-
+let sally = { name: 'Sally' };
+ 
 function greet(customer) {
-  console.log(`Hi ${customer}, my name is ${this.name}!`);
+    console.log(`Hi ${customer}, my name is ${this.name}!`);
 }
-
-let newGreet = greet.bind(sally);
-
-newGreet('Bob')
-// Hi Bob, my name is sally!
-
-greet('Bob')
+ 
+let newGreet = greet.bind(sally); // newGreet is context-bound to sally
+ 
+newGreet('Bob');
+// Hi Bob, my name is Sally!
+ 
+greet('Bob');
 // Hi Bob, my name is !
 ```
 
